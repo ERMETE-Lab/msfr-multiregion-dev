@@ -158,3 +158,12 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+
+# OpenFOAM tutorials
+OpenFOAM-nrg/tutorials
+
+# OpenFOAM make
+OpenFOAM-nrg/src/nuclear/Make/linux*
+OpenFOAM-nrg/applications/utilities/*/Make/linux*
+OpenFOAM-nrg/applications/solvers/msfrFoam/*/Make/linux*
