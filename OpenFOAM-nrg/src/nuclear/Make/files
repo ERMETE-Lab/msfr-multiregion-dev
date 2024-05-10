@@ -1,0 +1,11 @@
+fvPatchFields/albedo/albedoFvPatchScalarField.C
+fvPatchFields/albedoOld/albedoOldFvPatchFields.C
+fvPatchFields/albedoSP3/albedoSP3FvPatchFields.C
+fvPatchFields/deposition/depositionFvPatchScalarField.C
+fvPatchFields/alphatJayatillekeWallFunction/alphatJayatillekeWallFunctionFvPatchScalarField.C
+
+functionObjects/reactorParameters/reactorParameters.C
+
+fvOptions/flowRateForce/flowRateForce.C
+
+LIB = $(FOAM_USER_LIBBIN)/libnuclear
