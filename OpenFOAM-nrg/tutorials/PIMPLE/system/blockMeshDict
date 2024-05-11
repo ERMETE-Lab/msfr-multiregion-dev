@@ -1,0 +1,388 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ convertToMeters 1;
+
+R1 1.13;
+R2 1.83;
+R3 2.05;
+R4 2.25;
+
+H1 0.94;
+H2 1.13;
+H3 1.33;
+
+Hp1 0.20;
+Hp2 0.40;
+
+He1 -0.40;
+He2 0.00;
+
+theta #calc "degToRad(5.00)";
+
+L 0.01;
+
+N1 #calc "round($R1 / $L)";
+N2 #calc "round(2*$H1 / $L)";
+N3 #calc "round(($H2-$H1) / $L)";
+N4 #calc "round(($R2-$R1) / $L)";
+N5 #calc "round(($R3-$R2) / $L)";
+N6 #calc "round(($R4-$R3) / $L)";
+N7 #calc "round(($H3 - $H2) / $L)";
+
+vertices
+(
+    // main shape
+    name v01f (0 0 #calc "-$H2")
+    name v02f (0 0 $H2)
+    name v03f (0 0 #calc "-$H1")
+    name v04f (0 0 $H1)
+    name v05ff (0 0 #calc "-$H3")
+    name v06ff (0 0 $H3)
+
+    name v11f (#calc "$R1*cos(-$theta / 2)" #calc "$R1*sin(-$theta / 2)" #calc "-$H2")
+    name v12f (#calc "$R1*cos(-$theta / 2)" #calc "$R1*sin(-$theta / 2)" $H2)
+    name v13f (#calc "$R1*cos(-$theta / 2)" #calc "$R1*sin(-$theta / 2)" #calc "-$H1")
+    name v14f (#calc "$R1*cos(-$theta / 2)" #calc "$R1*sin(-$theta / 2)" $H1)
+    name v15ff (#calc "$R1*cos(-$theta / 2)" #calc "$R1*sin(-$theta / 2)" #calc "-$H3")
+    name v16ff (#calc "$R1*cos(-$theta / 2)" #calc "$R1*sin(-$theta / 2)" $H3)
+
+    name v21f (#calc "$R2*cos(-$theta / 2)" #calc "$R2*sin(-$theta / 2)" #calc "-$H2")
+    name v22f (#calc "$R2*cos(-$theta / 2)" #calc "$R2*sin(-$theta / 2)" $H2)
+    name v23f (#calc "$R2*cos(-$theta / 2)" #calc "$R2*sin(-$theta / 2)" #calc "-$H1")
+    name v24f (#calc "$R2*cos(-$theta / 2)" #calc "$R2*sin(-$theta / 2)" $H1)
+    name v25ff (#calc "$R2*cos(-$theta / 2)" #calc "$R2*sin(-$theta / 2)" #calc "-$H3")
+    name v26ff (#calc "$R2*cos(-$theta / 2)" #calc "$R2*sin(-$theta / 2)" $H3)
+
+    name v31f (#calc "$R3*cos(-$theta / 2)" #calc "$R3*sin(-$theta / 2)" #calc "-$H2")
+    name v32f (#calc "$R3*cos(-$theta / 2)" #calc "$R3*sin(-$theta / 2)" $H2)
+    name v33f (#calc "$R3*cos(-$theta / 2)" #calc "$R3*sin(-$theta / 2)" #calc "-$H1")
+    name v34f (#calc "$R3*cos(-$theta / 2)" #calc "$R3*sin(-$theta / 2)" $H1)
+    name v35ff (#calc "$R3*cos(-$theta / 2)" #calc "$R3*sin(-$theta / 2)" #calc "-$H3")
+    name v36ff (#calc "$R3*cos(-$theta / 2)" #calc "$R3*sin(-$theta / 2)" $H3)
+
+    name v41ff (#calc "$R4*cos(-$theta / 2)" #calc "$R4*sin(-$theta / 2)" #calc "-$H2")
+    name v42ff (#calc "$R4*cos(-$theta / 2)" #calc "$R4*sin(-$theta / 2)" $H2)
+    name v43ff (#calc "$R4*cos(-$theta / 2)" #calc "$R4*sin(-$theta / 2)" #calc "-$H1")
+    name v44ff (#calc "$R4*cos(-$theta / 2)" #calc "$R4*sin(-$theta / 2)" $H1)
+
+    name v45ff (#calc "$R4*cos(-$theta / 2)" #calc "$R4*sin(-$theta / 2)" #calc "-$H3")
+    name v46ff (#calc "$R4*cos(-$theta / 2)" #calc "$R4*sin(-$theta / 2)" $H3) 
+
+    name v11b (#calc "$R1*cos($theta / 2)" #calc "$R1*sin($theta / 2)" #calc "-$H2")
+    name v12b (#calc "$R1*cos($theta / 2)" #calc "$R1*sin($theta / 2)" $H2)
+    name v13b (#calc "$R1*cos($theta / 2)" #calc "$R1*sin($theta / 2)" #calc "-$H1")
+    name v14b (#calc "$R1*cos($theta / 2)" #calc "$R1*sin($theta / 2)" $H1)
+    name v15bb (#calc "$R1*cos($theta / 2)" #calc "$R1*sin($theta / 2)" #calc "-$H3")
+    name v16bb (#calc "$R1*cos($theta / 2)" #calc "$R1*sin($theta / 2)" $H3)
+
+    name v21b (#calc "$R2*cos($theta / 2)" #calc "$R2*sin($theta / 2)" #calc "-$H2")
+    name v22b (#calc "$R2*cos($theta / 2)" #calc "$R2*sin($theta / 2)" $H2)
+    name v23b (#calc "$R2*cos($theta / 2)" #calc "$R2*sin($theta / 2)" #calc "-$H1")
+    name v24b (#calc "$R2*cos($theta / 2)" #calc "$R2*sin($theta / 2)" $H1)
+    name v25bb (#calc "$R2*cos($theta / 2)" #calc "$R2*sin($theta / 2)" #calc "-$H3")
+    name v26bb (#calc "$R2*cos($theta / 2)" #calc "$R2*sin($theta / 2)" $H3)   
+
+    name v31b (#calc "$R3*cos($theta / 2)" #calc "$R3*sin($theta / 2)" #calc "-$H2")
+    name v32b (#calc "$R3*cos($theta / 2)" #calc "$R3*sin($theta / 2)" $H2)
+    name v33b (#calc "$R3*cos($theta / 2)" #calc "$R3*sin($theta / 2)" #calc "-$H1")
+    name v34b (#calc "$R3*cos($theta / 2)" #calc "$R3*sin($theta / 2)" $H1)
+    name v35bb (#calc "$R3*cos($theta / 2)" #calc "$R3*sin($theta / 2)" #calc "-$H3")
+    name v36bb (#calc "$R3*cos($theta / 2)" #calc "$R3*sin($theta / 2)" $H3)
+
+    name v41bb (#calc "$R4*cos($theta / 2)" #calc "$R4*sin($theta / 2)" #calc "-$H2")
+    name v42bb (#calc "$R4*cos($theta / 2)" #calc "$R4*sin($theta / 2)" $H2)
+    name v43bb (#calc "$R4*cos($theta / 2)" #calc "$R4*sin($theta / 2)" #calc "-$H1")
+    name v44bb (#calc "$R4*cos($theta / 2)" #calc "$R4*sin($theta / 2)" $H1)
+    
+    name v45bb (#calc "$R4*cos($theta / 2)" #calc "$R4*sin($theta / 2)" #calc "-$H3")
+    name v46bb (#calc "$R4*cos($theta / 2)" #calc "$R4*sin($theta / 2)" $H3)
+
+    // pump
+    name v25f (#calc "$R2*cos(-$theta / 2)" #calc "$R2*sin(-$theta / 2)" $Hp1)
+    name v35f (#calc "$R3*cos(-$theta / 2)" #calc "$R3*sin(-$theta / 2)" $Hp1)
+    name v26f (#calc "$R2*cos(-$theta / 2)" #calc "$R2*sin(-$theta / 2)" $Hp2)
+    name v36f (#calc "$R3*cos(-$theta / 2)" #calc "$R3*sin(-$theta / 2)" $Hp2)
+    name v25b (#calc "$R2*cos($theta / 2)" #calc "$R2*sin($theta / 2)" $Hp1)
+    name v35b (#calc "$R3*cos($theta / 2)" #calc "$R3*sin($theta / 2)" $Hp1)
+    name v26b (#calc "$R2*cos($theta / 2)" #calc "$R2*sin($theta / 2)" $Hp2)
+    name v36b (#calc "$R3*cos($theta / 2)" #calc "$R3*sin($theta / 2)" $Hp2)
+
+    name v45af (#calc "$R4*cos(-$theta / 2)" #calc "$R4*sin(-$theta / 2)" $Hp1)
+    name v46af (#calc "$R4*cos(-$theta / 2)" #calc "$R4*sin(-$theta / 2)" $Hp2)
+    name v45ab (#calc "$R4*cos($theta / 2)" #calc "$R4*sin($theta / 2)" $Hp1)
+    name v46ab (#calc "$R4*cos($theta / 2)" #calc "$R4*sin($theta / 2)" $Hp2)
+
+
+    // heat exchanger
+    name v27f (#calc "$R2*cos(-$theta / 2)" #calc "$R2*sin(-$theta / 2)" $He1)
+    name v37f (#calc "$R3*cos(-$theta / 2)" #calc "$R3*sin(-$theta / 2)" $He1)
+    name v28f (#calc "$R2*cos(-$theta / 2)" #calc "$R2*sin(-$theta / 2)" $He2)
+    name v38f (#calc "$R3*cos(-$theta / 2)" #calc "$R3*sin(-$theta / 2)" $He2)
+    name v27b (#calc "$R2*cos($theta / 2)" #calc "$R2*sin($theta / 2)" $He1)
+    name v37b (#calc "$R3*cos($theta / 2)" #calc "$R3*sin($theta / 2)" $He1)
+    name v28b (#calc "$R2*cos($theta / 2)" #calc "$R2*sin($theta / 2)" $He2)
+    name v38b (#calc "$R3*cos($theta / 2)" #calc "$R3*sin($theta / 2)" $He2)
+
+    name v47af (#calc "$R4*cos(-$theta / 2)" #calc "$R4*sin(-$theta / 2)" $He1)
+    name v48af (#calc "$R4*cos(-$theta / 2)" #calc "$R4*sin(-$theta / 2)" $He2)
+    name v47ab (#calc "$R4*cos($theta / 2)" #calc "$R4*sin($theta / 2)" $He1)
+    name v48ab (#calc "$R4*cos($theta / 2)" #calc "$R4*sin($theta / 2)" $He2)
+
+);
+
+blocks
+(
+    hex (v01f v11f v11b v01f v03f v13f v13b v03f) core ($N1 1 $N3) simpleGrading (1 1 1)
+    hex (v03f v13f v13b v03f v04f v14f v14b v04f) core ($N1 1 $N2) simpleGrading (1 1 1)
+    hex (v04f v14f v14b v04f v02f v12f v12b v02f) core ($N1 1 $N3) simpleGrading (1 1 1)
+    hex (v11f v21f v21b v11b v13f v23f v23b v13b) pipes ($N4 1 $N3) simpleGrading (1 1 1)
+    hex (v14f v24f v24b v14b v12f v22f v22b v12b) pipes ($N4 1 $N3) simpleGrading (1 1 1)
+    hex (v21f v31f v31b v21b v23f v33f v33b v23b) pipes ($N5 1 $N3) simpleGrading (1 1 1)
+    hex (v24f v34f v34b v24b v22f v32f v32b v22b) pipes ($N5 1 $N3) simpleGrading (1 1 1)
+    hex (v23f v33f v33b v23b v27f v37f v37b v27b) pipes ($N5 1 #calc "round(($He1-(-$H1))/$L)") simpleGrading (1 1 1)
+    hex (v27f v37f v37b v27b v28f v38f v38b v28b) heatExchanger ($N5 1 #calc "round(($He2-($He1))/$L)") simpleGrading (1 1 1)
+    hex (v28f v38f v38b v28b v25f v35f v35b v25b) pipes ($N5 1 #calc "round(($Hp1-$He2)/$L)") simpleGrading (1 1 1)
+    hex (v25f v35f v35b v25b v26f v36f v36b v26b) pump ($N5 1 #calc "round(($Hp2-$Hp1)/$L)") simpleGrading (1 1 1)
+    hex (v26f v36f v36b v26b v24f v34f v34b v24b) pipes ($N5 1 #calc "round(($H1-$Hp2)/$L)") simpleGrading (1 1 1)
+
+    hex (v05ff v15ff v15bb v05ff v01f v11f v11b v01f) structure ($N1 1 $N7) simpleGrading (1 1 1)
+    hex (v02f v12f v12b v02f v06ff v16ff v16bb v06ff) structure ($N1 1 $N7) simpleGrading (1 1 1)
+    hex (v15ff v25ff v25bb v15bb v11f v21f v21b v11b) structure ($N4 1 $N7) simpleGrading (1 1 1)
+    hex (v12f v22f v22b v12b v16ff v26ff v26bb v16bb) structure ($N4 1 $N7) simpleGrading (1 1 1)
+    hex (v25ff v35ff v35bb v25bb v21f v31f v31b v21b) structure ($N5 1 $N7) simpleGrading (1 1 1)
+    hex (v22f v32f v32b v22b v26ff v36ff v36bb v26bb) structure ($N5 1 $N7) simpleGrading (1 1 1)
+    hex (v35ff v45ff v45bb v35bb v31f v41ff v41bb v31b) structure ($N6 1 $N7) simpleGrading (1 1 1)
+    hex (v32f v42ff v42bb v32b v36ff v46ff v46bb v36bb) structure ($N6 1 $N7) simpleGrading (1 1 1)
+    hex (v31f v41ff v41bb v31b v33f v43ff v43bb v33b) structure ($N6 1 $N3) simpleGrading (1 1 1)
+    hex (v34f v44ff v44bb v34b v32f v42ff v42bb v32b) structure ($N6 1 $N3) simpleGrading (1 1 1)
+    hex (v33f v43ff v43bb v33b v37f v47af v47ab v37b) structure ($N6 1 #calc "round(($He1-(-$H1))/$L)") simpleGrading (1 1 1)
+    hex (v37f v47af v47ab v37b v38f v48af v48ab v38b) structure ($N6 1 #calc "round(($He2-($He1))/$L)") simpleGrading (1 1 1)
+    hex (v38f v48af v48ab v38b v35f v45af v45ab v35b) structure ($N6 1 #calc "round(($Hp1-$He2)/$L)") simpleGrading (1 1 1)
+    hex (v35f v45af v45ab v35b v36f v46af v46ab v36b) structure ($N6 1 #calc "round(($Hp2-$Hp1)/$L)") simpleGrading (1 1 1)
+    hex (v36f v46af v46ab v36b v34f v44ff v44bb v34b) structure ($N6 1 #calc "round(($H1-$Hp2)/$L)") simpleGrading (1 1 1)
+);
+
+edges
+(
+    arc v11f v11b ($R1 0 #calc "-$H2")
+    arc v12f v12b ($R1 0 $H2)
+    arc v13f v13b ($R1 0 #calc "-$H1")
+    arc v14f v14b ($R1 0 $H1)
+
+    arc v21f v21b ($R2 0 #calc "-$H2")
+    arc v22f v22b ($R2 0 $H2)
+    arc v23f v23b ($R2 0 #calc "-$H1")
+    arc v24f v24b ($R2 0 $H1)
+    arc v25f v25b ($R2 0 $Hp1)
+    arc v26f v26b ($R2 0 $Hp2)
+    arc v27f v27b ($R2 0 $He1)
+    arc v28f v28b ($R2 0 $He2)
+
+    arc v31f v31b ($R3 0 #calc "-$H2")
+    arc v32f v32b ($R3 0 $H2)
+    arc v33f v33b ($R3 0 #calc "-$H1")
+    arc v34f v34b ($R3 0 $H1)
+    arc v35f v35b ($R3 0 $Hp1)
+    arc v36f v36b ($R3 0 $Hp2)
+    arc v37f v37b ($R3 0 $He1)
+    arc v38f v38b ($R3 0 $He2)
+
+
+    arc v15ff v15bb ($R1 0 #calc "-$H3")
+    arc v16ff v16bb ($R1 0 $H3)
+    arc v25ff v25bb ($R2 0 #calc "-$H3")
+    arc v26ff v26bb ($R2 0 $H3)
+    arc v35ff v35bb ($R3 0 #calc "-$H3")
+    arc v36ff v36bb ($R3 0 $H3)
+   
+    arc v41ff v41bb ($R4 0 #calc "-$H2")
+    arc v42ff v42bb ($R4 0 $H2)
+    arc v43ff v43bb ($R4 0 #calc "-$H1")
+    arc v44ff v44bb ($R4 0 $H1)
+    arc v45ff v45bb ($R4 0 #calc "-$H3")
+    arc v46ff v46bb ($R4 0 $H3)
+
+    arc v45af v45ab ($R4 0 $Hp1)
+    arc v46af v46ab ($R4 0 $Hp2)
+    arc v47af v47ab ($R4 0 $He1)
+    arc v48af v48ab ($R4 0 $He2)
+
+
+/*
+    BSpline v13f v14f
+    (
+        (#calc "0.75*$R1*cos(-$theta / 2)" #calc "0.75*$R1*sin(-$theta / 2)" -0.5)
+        (#calc "0.75*$R1*cos(-$theta / 2)" #calc "0.75*$R1*sin(-$theta / 2)" 0.5)
+    )
+    BSpline v13b v14b
+    (
+        (#calc "0.75*$R1*cos($theta / 2)" #calc "0.75*$R1*sin($theta / 2)" -0.5)
+        (#calc "0.75*$R1*cos($theta / 2)" #calc "0.75*$R1*sin($theta / 2)" 0.5)
+    )
+*/
+);
+
+boundary
+(
+    front
+    {
+        type wedge;
+        faces
+        (
+            (v01f v11f v13f v03f)
+            (v03f v13f v14f v04f)
+            (v04f v14f v12f v02f)
+            (v11f v21f v23f v13f)
+            (v14f v24f v22f v12f)
+            (v21f v31f v33f v23f)
+            (v23f v33f v37f v27f)
+            (v27f v37f v38f v28f)
+            (v28f v38f v35f v25f)
+            (v25f v35f v36f v26f)
+            (v26f v36f v34f v24f)
+            (v24f v34f v32f v22f)
+	    
+            (v05ff v15ff v11f v01f)
+            (v02f v12f v16ff v06ff)
+            (v15ff v25ff v21f v11f)
+            (v12f v22f v26ff v16ff)
+            (v25ff v35ff v31f v21f)
+            (v22f v32f v36ff v26ff)
+            (v35ff v45ff v41ff v31f)
+            (v32f v42ff v46ff v36ff)
+            (v31f v41ff v43ff v33f)
+            (v34f v44ff v42ff v32f)
+
+	    (v33f v43ff v47af v37f)
+	    (v37f v47af v48af v38f)
+            (v38f v48af v45af v35f)
+            (v35f v45af v46af v36f)
+            (v36f v46af v44ff v34f)
+
+
+        );
+    }
+
+    back
+    {
+        type wedge;
+        faces
+        (
+            (v01f v11b v13b v03f)
+            (v03f v13b v14b v04f)
+            (v04f v14b v12b v02f)
+            (v11b v21b v23b v13b)
+            (v14b v24b v22b v12b)
+            (v21b v31b v33b v23b)
+            (v23b v33b v37b v27b)
+            (v27b v37b v38b v28b)
+            (v28b v38b v35b v25b)
+            (v25b v35b v36b v26b)
+            (v26b v36b v34b v24b)
+            (v24b v34b v32b v22b)
+
+            (v05ff v15bb v11b v01f)
+            (v02f v12b v16bb v06ff)
+            (v15bb v25bb v21b v11b)
+            (v12b v22b v26bb v16bb)
+            (v25bb v35bb v31b v21b)
+            (v22b v32b v36bb v26bb)
+            (v35bb v45bb v41bb v31b)
+            (v32b v42bb v46bb v36bb)
+            (v31b v41bb v43bb v33b)
+            (v34b v44bb v42bb v32b)
+
+            (v33b v43bb v47ab v37b)
+            (v37b v47ab v48ab v38b)
+            (v38b v48ab v45ab v35b)
+            (v35b v45ab v46ab v36b)
+            (v36b v46ab v44bb v34b)
+        );
+    }
+
+    bottom
+    {
+        type wall;
+        faces
+        (
+            (v05ff v15ff v15bb v05ff)
+            (v15ff v25ff v25bb v15bb)
+	    (v25ff v35ff v35bb v25bb)
+            (v35ff v45ff v45bb v35bb)
+        );
+    }
+
+    top
+    {
+        type wall;
+        faces
+        (
+            (v06ff v16ff v16bb v06ff)
+            (v16ff v26ff v26bb v16bb)
+            (v26ff v36ff v36bb v26bb)
+            (v36ff v46ff v46bb v36bb)
+        );
+    }
+
+    external
+    {
+        type wall;
+        faces
+        (
+         (v45ff v45bb v41bb v41ff)
+         (v41ff v41bb v43bb v43ff)
+         (v44ff v44bb v42bb v42ff) 
+         (v42ff v42bb v46bb v46ff)
+	 (v43ff v43bb v47ab v47af)
+	 (v47af v47ab v48ab v48af)
+	 (v48af v48ab v45ab v45af)
+	 (v45af v45ab v46ab v46af)
+	 (v46af v46ab v44bb v44ff)
+        
+
+        /*    (v33f v33b v37b v37f)
+            (v37f v37b v38b v38f)
+            (v38f v38b v35b v35f)
+            (v35f v35b v36b v36f)
+            (v36f v36b v34b v34f)
+	*/
+      );
+    }
+
+    internal
+    {
+        type wall;
+        faces
+        (
+            (v13f v23f v23b v13b)
+            (v14f v24f v24b v14b)
+            (v13f v13b v14b v14f)
+            (v23f v23b v27b v27f)
+            (v27f v27b v28b v28f)
+            (v28f v28b v25b v25f)
+            (v25f v25b v26b v26f)
+            (v26f v26b v24b v24f)
+        );
+    }
+);
+
+mergePatchPairs
+(
+);
+
+// ************************************************************************* //

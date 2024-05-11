@@ -1,0 +1,121 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvOptions;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+#include "transportProperties";
+
+zerovelocity
+{
+    type          vectorFixedValueConstraint;
+    active        yes;
+
+    selectionMode   cellZone;
+    cellZone        structure;
+    fieldValues
+    {
+     U    (0.0 0.0 0.0);
+    }
+}
+
+/* turbulence
+{
+    type            scalarFixedValueConstraint;
+    active          yes;
+
+    selectionMode   cellZone;
+    cellZone        structure;
+    fieldValues
+    {
+        k           0;
+        nut     0;
+    }
+}
+*/ 
+
+heatExchanger
+{
+    type    semiImplicitSource;
+    active  true;
+
+    selectionMode   cellZone;
+    cellZone        heatExchanger pipes;
+    volumeMode      absolute;
+
+    sources
+    {
+     T
+    { explicit  
+        {
+                 type coded;
+                 name hex;
+                 code
+                 #{
+                const scalar h = 2.5e6;
+                const scalar Text = 900;
+                const scalar rhocp = 6864637.337 ;
+                return  h*Text/rhocp;
+                 #};
+             }
+
+
+      implicit 
+          {
+                 type coded;
+                 name hex_implicit;
+                 code
+                 #{
+                const scalar h = 2.5e6;
+                const scalar rhocp =  6864637.337;
+                return -h/rhocp;
+                 #};
+             }
+       }
+   }
+}
+
+
+
+pump
+{
+    type    semiImplicitSource;
+    active  true;
+
+    selectionMode   cellZone;
+    cellZone        pump;
+    volumeMode      specific;
+
+    sources
+    {
+        U
+      {  explicit 
+           {
+                 type coded;
+                 name pup;
+                 code
+                 #{
+                 scalar v1(0.0);
+                 scalar v2(0.0);
+                 scalar v3(-26.6);
+
+                 return  vector(v1,v2,v3);
+                 #};
+          }
+         implicit 0.0; // obtained with flowRateForce
+            }
+    }
+}
+
+
+// ************************************************************************* //

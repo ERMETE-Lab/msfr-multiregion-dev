@@ -1,0 +1,69 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    default         steadyState;
+}
+
+gradSchemes
+{
+    default         Gauss linear;
+}
+
+divSchemes
+{
+    default         none;
+
+    div(phi,U)      bounded Gauss linearUpwind default;
+    div(phi,T)      bounded Gauss linearUpwind default;
+    div(phi,k)      bounded Gauss linearUpwind default;
+    div(phi,epsilon) bounded Gauss linearUpwind default;
+
+    div(phi,prec1)  bounded Gauss linearUpwind default;
+    div(phi,prec2)  bounded Gauss linearUpwind default;
+    div(phi,prec3)  bounded Gauss linearUpwind default;
+    div(phi,prec4)  bounded Gauss linearUpwind default;
+    div(phi,prec5)  bounded Gauss linearUpwind default;
+    div(phi,prec6)  bounded Gauss linearUpwind default;
+    div(phi,prec7)  bounded Gauss linearUpwind default;
+    div(phi,prec8)  bounded Gauss linearUpwind default;
+    div(phi,dec1)   bounded Gauss linearUpwind default;
+    div(phi,dec2)   bounded Gauss linearUpwind default;
+    div(phi,dec3)   bounded Gauss linearUpwind default;
+
+
+    div((nuEff*dev2(T(grad(U))))) Gauss linear;
+}
+
+laplacianSchemes
+{
+    default         Gauss linear limited 1;
+}
+
+interpolationSchemes
+{
+    default         linear;
+}
+
+snGradSchemes
+{
+    default         limited 1;
+}
+
+
+// ************************************************************************* //

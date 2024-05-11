@@ -1,0 +1,135 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    p_rgh
+    {
+        solver          GAMG;
+        smoother        DIC;
+
+        tolerance       1e-9;
+        relTol          1e-6;
+        maxIter         100;
+    }
+
+    p_rghFinal
+    {
+        $p_rgh;
+        relTol          0;
+    }
+
+    "(U|k|epsilon|omega|R)"
+    {
+        solver          GAMG;
+        smoother        GaussSeidel;
+
+        tolerance       1e-8;
+        relTol          1e-6;
+        maxIter         100;
+    }
+
+    "(U|k|epsilon|omega|R)Final"
+    {
+        $U;
+        relTol          0;
+    }
+
+    T
+    {
+        solver          PBiCG;
+        preconditioner  DILU;
+
+        tolerance       1e-9;
+        relTol          1e-6;
+        maxIter         100;
+    }
+
+    TFinal
+    {
+        $T;
+        relTol          0;
+    }
+
+    "flux.*"
+    {
+        solver          GAMG;
+        smoother        DIC;
+        
+        tolerance       1e-9;
+        relTol          1e-6;
+        maxIter         100;
+    }
+
+    "flux.*Final"
+    {
+        $flux1;
+        relTol          0;
+    }
+
+    "(prec.*|dec.*)"
+    {
+        solver          GAMG;
+        smoother        GaussSeidel;
+        
+        tolerance       1e-9;
+        relTol          1e-8;
+        maxIter         100; 
+    }
+
+    "(prec.*|dec.*)Final"
+    {
+        $prec1;
+        relTol          0;
+    }
+
+}
+
+SIMPLE
+{
+    nNonOrthogonalCorrectors 2;
+    consistent yes;
+
+    pRefCell        0;
+    pRefValue       0;
+
+    residualControl
+    {
+        p_rgh               1e-7;
+        T                   1e-7;
+        "(U|k|epsilon)"     1e-7;
+        "flux.*"            1e-7;
+        "(prec.*|dec.*)"    1e-7;
+    }
+}
+
+relaxationFactors
+{
+    fields
+    {
+        p_rgh               0.8;
+    }
+    equations
+    {
+        T                   0.8;
+        "(U|k|epsilon)"     0.6;
+        "flux.*"            0.8;
+        "(prec.*|dec.*)"    0.6;
+    }
+}
+
+// ************************************************************************* //

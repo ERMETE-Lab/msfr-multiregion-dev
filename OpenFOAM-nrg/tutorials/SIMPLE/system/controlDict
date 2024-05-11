@@ -1,0 +1,181 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     msfrSimpleStructureFoam;
+
+startFrom       latestTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         50000;
+
+deltaT          1;
+
+writeControl    timeStep;
+
+writeInterval   10000;
+
+purgeWrite      0;
+
+writeFormat     binary;
+
+writePrecision  8;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable true;
+
+// ************************************************************************* //
+
+nominalPower    #calc "3000e6/(360/5)"; // Target total reactor power, W
+tempCoupling  yes; // Activate fission energy source term
+fpTransport no;
+// ************************************************************************* //
+
+functions
+{
+    residuals
+    {
+        type            residuals;
+        libs            ("libutilityFunctionObjects.so");
+
+        writeControl    timeStep;
+        writeInterval   1;
+
+        fields          (p_rgh U k epsilon T flux1 prec1 dec1);
+    }
+
+    reactorParameters
+    {
+        type            reactorParameters;
+        libs            ("libfieldFunctionObjects.so");
+
+        writeControl    timeStep;
+        writeInterval   1;
+
+        write           true;
+        log             false;
+
+        fields          (Keff reactivity Q);
+    }
+
+    #includeFunc flowRateFaceZone(name=pumpOutlet)
+
+  power_core
+    {
+        type            volFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+
+        log             false;
+
+        writeControl    timeStep;
+        writeInterval   1;
+        writeFields     false;
+
+        regionType      cellZone;
+        name            core;
+	operation 	volAverage;
+        fields          (q);
+    }
+
+    power_pump
+    {
+        type            volFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+
+        log             false;
+
+        writeControl    timeStep;
+        writeInterval   1;
+        writeFields     false;
+
+        regionType      cellZone;
+        name            pump;
+        operation       volAverage;
+
+        fields          (q);
+    }
+    power_hex
+    {
+        type            volFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+
+        log             false;
+
+        writeControl    timeStep;
+        writeInterval   1;
+        writeFields     false;
+
+        regionType      cellZone;
+        name            heatExchanger;
+        operation       volAverage;
+
+        fields          (q);
+    }
+
+    power_hot
+    {
+        type            volFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+
+        log             false;
+
+        writeControl    timeStep;
+        writeInterval   1;
+        writeFields     false;
+
+        regionType      cellZone;
+        name            pipes;
+        operation       volAverage;
+
+        fields          (q);
+    }
+
+
+
+
+    pumpAverageVelocity
+    {
+        type            volFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+
+        log             false;
+
+        writeControl    timeStep;
+        writeInterval   1;
+        writeFields     false;
+
+        regionType      cellZone;
+        name            pump;
+        operation       volAverage;
+
+        fields          (U);
+    }
+}
+
+OptimisationSwitches
+{
+    // uncollated (default), collated or masterUncollated
+    fileHandler collated;
+}
+

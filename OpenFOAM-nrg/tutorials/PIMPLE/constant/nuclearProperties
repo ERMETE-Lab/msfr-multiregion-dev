@@ -1,0 +1,40 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      nuclearProperties;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+neutronTransport
+{
+    useDoppler          yes;
+
+    rhoRef              4306.71; // Reference density, kg m^-3
+    TRef                900.00; // Reference temperature, K
+
+    energyGroups        6;
+}
+
+delayedNeutronPrecursors
+{
+    groups              8;
+}
+
+decayHeatPrecursors
+{
+    groups              3;
+}
+
+
+// ************************************************************************* //

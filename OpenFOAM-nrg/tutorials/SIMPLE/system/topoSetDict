@@ -1,0 +1,68 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Following topoSet actions were used to create heat exchanger and pump
+// regions. Resulting zones are already included in the polyMesh folder.
+// This dictionary file is left here for reference and possible reuse.
+
+actions
+(
+// Create faceZone for pump inlet region
+    // Create "pumpInlet" faceSet from box geometry
+    {
+        name    pumpOutlet;
+        type    faceSet;
+        action  new;
+        source  boxToFace;
+        sourceInfo
+        {
+            box      (1.7 -1.0 0.199) (2.1 1.0 0.201);
+        }
+    }
+
+    // Create "pump" cellSet from "pump" cellZone (if not
+    // already present)
+    {
+        name    pump;
+        type    cellSet;
+        action  new;
+        source  zoneToCell;
+        sourceInfo
+        {
+            name pump;
+        }
+    }
+
+    // Create "pumpInlet" faceZone from "pumpInlet" faceSet
+    // and "pump" cellSet
+    // Option flip must be set to "true" to ensure correct orientation for
+    // use with the effectivenessHeatExchangerSource fvOptions source
+    {
+        name    pumpOutlet;
+        type    faceZoneSet;
+        action  new;
+        source  setsToFaceZone;
+        sourceInfo
+        {
+            faceSet pumpOutlet;
+            cellSet pump;
+            flip    true;
+        }
+    }
+// ************************************************************************* //
+);
+
+// ************************************************************************* //

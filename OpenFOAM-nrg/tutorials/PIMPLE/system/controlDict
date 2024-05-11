@@ -1,0 +1,137 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  6
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     msfrPimpleStructureFoam;
+
+startFrom       latestTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         55;
+
+deltaT          1e-3;
+
+writeControl    adjustableRunTime;
+
+writeInterval   0.2;
+
+purgeWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  8;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable true;
+
+adjustTimeStep  yes;
+
+maxCo           0.5;
+
+maxDeltaT       1e-3;
+
+// ************************************************************************* //
+
+nominalPower    #calc "3000e6/(360/5)"; // Target total reactor power, W (not used in transient solver)
+fpTransport         no;
+tempCoupling        yes; // Activate fission energy source term
+ //Keff                0.9783998;
+// ************************************************************************* //
+
+functions
+{
+    residuals
+    {
+        type            residuals;
+        libs            ("libutilityFunctionObjects.so");
+
+        writeControl    timeStep;
+        writeInterval   1;
+
+        fields          (p_rgh U k epsilon T flux1 prec1 dec1);
+    }
+
+    reactorParameters
+    {
+        type            reactorParameters;
+        libs            ("libfieldFunctionObjects.so");
+
+        writeControl    timeStep;
+        writeInterval   1;
+
+        write           true;
+        log             false;
+
+        fields          (Keff reactivity Q);
+    }
+
+
+    #includeFunc flowRateFaceZone(name=pumpOutlet)
+    #includeFunc  cellMax(T)
+
+    pumpAverageVelocity
+    {
+        type            volFieldValue;
+        libs            ("libfieldFunctionObjects.so");
+
+        log             false;
+
+        writeControl    timeStep;
+        writeInterval   1;
+        writeFields     false;
+
+        regionType      cellZone;
+        name            pump;
+        operation       volAverage;
+
+        fields
+        (
+            U
+        );
+    }
+
+    meanTcore
+    {
+        type volFieldValue;
+        libs ("libfieldFunctionObjects.so");
+        log false;
+        writeControl timeStep;
+        writeInterval 1;
+        writeFields false;
+        regionType cellZone;
+        name core;
+        operation volAverage;
+        fields
+        (
+            T
+        );
+    }
+
+}
+
+
+OptimisationSwitches {
+    // uncollated (default), collated or masterUncollated
+    fileHandler collated;
+}

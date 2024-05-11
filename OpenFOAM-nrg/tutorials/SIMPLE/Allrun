@@ -1,0 +1,29 @@
+#!/bin/bash
+cd ${0%/*} || exit 1    # Run from this directory
+
+# Source tutorial run functions
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+application=$(getApplication)
+parallel=true
+
+cp -r 0.orig 0
+#cp -r 0.ss 0
+
+runApplication blockMesh
+
+runApplication topoSet
+runApplication setFields
+
+if $parallel;
+then
+    runApplication decomposePar
+    runParallel renumberMesh -overwrite -parallel
+    runParallel -append $application
+    runApplication -append reconstructPar -newTimes
+else
+    runApplication renumberMesh -overwrite
+    runApplication -append $application
+fi
+
+#------------------------------------------------------------------------------
