@@ -68,4 +68,5 @@ In the `msfr-multiregion-dev` folders, you can find some Jupyter notebooks (*.ip
 
 ## Python Routines for Parametric Solutions
 In the `RoutinesForParametricSolution` folder, you can find some Python routines to run the cases in a parametric way.
-The Singular Value Decomposition is used to store the results in a compressed way to save storage space.
+The Singular Value Decomposition is used to store the results (only some variables) in a compressed way to save storage space.
+The `run.py` script includes the RITUAL for the Polimi Cluster, contact stefano.riva@polimi.it for more information.
