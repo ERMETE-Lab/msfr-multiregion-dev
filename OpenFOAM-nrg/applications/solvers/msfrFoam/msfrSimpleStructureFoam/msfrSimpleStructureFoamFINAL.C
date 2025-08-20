@@ -47,8 +47,15 @@ Description
 
 #include "fvCFD.H"
 #include "singlePhaseTransportModel.H"
-#include "kinematicMomentumTransportModel.H"
+
+// Specialised class for incompressible flows, using kinematic viscosity.
+// To be changed if we want to model full compressibility.
+#include "kinematicMomentumTransportModel.H" 
+
+// This implements the radiation model interface but without radiation effects.
+// To be changed once the radiation module will be fully completed.
 #include "noRadiation.H"
+
 #include "fvOptions.H"
 #include "simpleControl.H"
 
@@ -63,18 +70,32 @@ int main(int argc, char *argv[])
     #include "createMesh.H"
     #include "createControl.H"
     #include "createFields.H"
+
+    // Add to the default fields (T, p_rgh, p, U, turbulence quantities, 
+    // and thermo-dynamics properties) the neutronics-specific fields 
+    // (total flux, group fluxes, delayed neutron precursors fields, decay heat
+    // precursors fields, neutronics properties, volumetric heat sources)
     #include "createNuclearFieldsStructure.H"
+
     #include "initContinuityErrs.H"
 
     turbulence->validate();
 
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-    #include "normFlux.H"
+    #include "normFlux.H" // Evaluate the normalisation factor and normalise the fluxes
 
+    // Here we initialise the temperature and density-dependent nuclear properties (diffusion
+    // coefficient and cross sections) with the initial temperature field.
     #include "updateCrossSections.H"
+
+    // Initialise the fission rates based on the initial fluxes and cross-sections
     #include "updateFissionRate.H"
+
+    // Initialise the neutron sources based on the initial fluxes and cross-sections
     #include "updateNeutronSource.H"
+
+    // Initialise the prompt and delayed heat sources from initial fluxes, cross-sections and precursors
     #include "updatePowerSource.H"
 
     Info<< "\nStarting time loop\n" << endl;
@@ -85,20 +106,24 @@ int main(int argc, char *argv[])
 
         // Pressure-velocity SIMPLE corrector
         {
-            #include "UEqn.H"
-            #include "TEqn.H"
+            #include "UEqn.H"      // Solve the velocity equation
+            #include "TEqn.H"      // Solve the temperature equation
 
-            #include "fluxEqns.H"
-            #include "precEqns.H"
-            #include "decEqns.H"
+            #include "fluxEqns.H"  // Solve the SP3 multigroup diffusion equations
+            #include "precEqns.H"  // Solve the delayed neutron precursor equations
+            #include "decEqns.H"   // Solve the decay heat precursors equations
 
-            if (fpTransport)
+            // Flag to determine whether we consider or not the transport of the 
+            // solid fission products (defined in constant/nuclearProperties, default False)
+            if (fpTransport)      
             {
-                #include "fpEqns.H"
+                #include "fpEqns.H"  // Solve the fission product transport equation
             }
 
             #include "pEqn.H"
 
+            // Update the nuclear properties, fission rates, neutron sources and
+            // heat sources based on the new values of temperature and density
             #include "updateCrossSections.H"
             #include "updateFissionRate.H"
             #include "updateNeutronSource.H"
@@ -108,7 +133,8 @@ int main(int argc, char *argv[])
         laminarTransport.correct();
         turbulence->correct();
 
-        #include "updateKeff.H"
+        #include "updateKeff.H"     // For the steady-state solver, compute the effective
+                                    // multiplication factor and the reactivity
 
         runTime.write();
 
