@@ -8,10 +8,10 @@ OpenFOAM v8 (CFD Direct version)
 To install the solver, navigate to `msfr-multiregion-dev/OpenFOAM-nrg/src` and run `./Allwmake` (OpenFOAM environment must be active).
 
 ## Test
-Run `msfrSimpleStructureFoam`. If you encounter the error 'cannot find file "......./src/system/controlDict', the installation was successful.
+Run `msfrSimpleStructureFoam` from your $HOME folder. If you encounter the error 'cannot find file "......./src/system/controlDict', the installation was successful.
 
 ## General Comments
-- The mesh included in the test case is the 2D-EVOL geometry (attached in the email).
+- The mesh included in the test case is the 2D-EVOL geometry (defined in blockMeshDict).
 - We don't simulate the fertile blanket or the inner neutron absorber.
 - We simulate the primary fluid loop and the reflector layer outside.
 
@@ -70,3 +70,19 @@ In the `msfr-multiregion-dev` folders, you can find some Jupyter notebooks (*.ip
 In the `RoutinesForParametricSolution` folder, you can find some Python routines to run the cases in a parametric way.
 The Singular Value Decomposition is used to store the results (only some variables) in a compressed way to save storage space.
 The `run.py` script includes the RITUAL for the Polimi Cluster, contact stefano.riva@polimi.it for more information.
+
+## How To Cite and Credits
+The original version of the solver was developed within the SAMOFAR and SAMOSAFER H2020 European Projects (https://samofar.eu and https://samosafer.eu/):
+- @article{CERVI2019209,
+title = {Development of an SP3 neutron transport solver for the analysis of the Molten Salt Fast Reactor},
+journal = {Nuclear Engineering and Design},
+volume = {346},
+pages = {209-219},
+year = {2019},
+issn = {0029-5493},
+doi = {https://doi.org/10.1016/j.nucengdes.2019.03.001},
+url = {https://www.sciencedirect.com/science/article/pii/S0029549319300354},
+author = {E. Cervi and S. Lorenzi and A. Cammi and L. Luzzi},}
+
+If you use the present solve, please cite the above reference and the following:
+- https://www.ans.org/pubs/proceedings/article-55632
